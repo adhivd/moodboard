@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Draggable from 'react-draggable';
+import Block from './Block';
 
 
 
@@ -16,7 +17,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        document.getElementById('example').setAttribute('draggable', false);
+        // document.getElementById('example').setAttribute('draggable', false);
     }
 
     getXY = (el) => {
@@ -28,9 +29,16 @@ class Home extends Component {
 
     render() {
         return (
-            <Draggable>
-                <img src="https://i.giphy.com/media/cb22OXcPqwmg8/giphy.webp" className="box" id="example" onClick={this.getXY} />
-            </Draggable>
+            <div>
+                <Block 
+                    contentType="img"
+                    dataUrl="https://media.giphy.com/media/kEEd75zRpcgBidBttQ/giphy-downsized-large.gif"
+                />
+                <Draggable>
+                    <p>Hello</p>
+
+                </Draggable>
+            </div>
         )
     }    
 
