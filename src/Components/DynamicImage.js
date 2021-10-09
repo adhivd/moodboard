@@ -5,29 +5,22 @@ import ResizableRect from 'react-resizable-rotatable-draggable';
 
 
 
-function DynamicImage extends Component {
-    constructor(props) {
-        super(props);
-        }
-        
-        render() {
+const DynamicImage = (props) => {
 
-            let content;
+    let imgStyle = {
+        position: 'absolute',
+        top: props.top + 1, // bc of borders on rect
+        left: props.left + 1,
+        width: props.width,
+        height: props.height,
+        transform: 'rotate(' + props.rotateAngle + 'deg)',
+        zIndex: -1,
+    }
 
-            if(this.state.contentType =="img") {
-                content = <img src={this.state.dataUrl} />
-            }
+    return (
+        <img src={props.dataUrl} style={imgStyle} />
+    );
 
-            const {width, top, left, height, rotateAngle} = this.state
-            return (
-                    <img
-                        style={imgStyle}
-
-
-                    />
-            )
-        }
-
-}
+};
 
 export default DynamicImage;

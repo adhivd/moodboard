@@ -1,0 +1,51 @@
+.toolkit {
+
+    position: absolute;
+    top: 20px;
+    left: 5%;
+    height: 50px;
+    width: 30%;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+    display:flex;
+    display-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+
+    .action {
+
+        height: 50px;
+        width: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        transition: 0.3s all ease;  
+        
+
+        img {
+            opacity: 0.4;
+            width: 20px;
+            display: block !important;
+            margin: 0 auto;
+            
+        }
+
+        &:hover {
+
+
+
+            background-color: #ebebeb;
+            cursor: pointer;
+
+            img {
+                opacity: 1;
+            }
+            
+        }
+    }
+
+
+}

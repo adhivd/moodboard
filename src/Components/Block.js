@@ -9,6 +9,20 @@ import DynamicImage from './DynamicImage';
 class Block extends Component {
     constructor(props) {
         super(props);
+
+        var img = new Image();
+        let height;
+        let width;
+
+        img.onload = () => {
+            this.setState({
+                height: img.height,
+                width: img.width,
+            })
+        }
+
+        img.src = props.dataUrl;
+
         this.state = {
             width: 100,
             height: 100,
@@ -20,7 +34,6 @@ class Block extends Component {
           }
           
         console.log(this.state);
-
         }
         
       
@@ -38,11 +51,6 @@ class Block extends Component {
             width,
             height
           })
-
-          
-
-          console.log(style)
-
         }
 
         handleRotate = (rotateAngle) => {
@@ -72,6 +80,7 @@ class Block extends Component {
                             top={top}
                             width={width}
                             height={height}
+                            rotateAngle={rotateAngle}
                             dataUrl={this.state.dataUrl}
                         />
         }
