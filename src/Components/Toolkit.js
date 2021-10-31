@@ -1,19 +1,40 @@
 import React, {Component, Fragment} from 'react';
-import addImage from '../content/img/plus.png';
+import plus from '../content/img/plus.png';
 
 
 
 
-const Toolkit = (props) => {
+class Toolkit extends Component {
 
-    return (
-        <div className="toolkit">
-            <div className="action add" onClick={props.addBlock}>
-                <img src={addImage} />
+    constructor(props) {
+        super(props);
+
+    }
+
+    addImage = () => {
+        this.props.addBlock('img');
+    }
+    
+    addText = () => {
+        this.props.addBlock('text');
+    }
+    
+
+    render() {
+
+
+        return (
+            <div className="toolkit">
+                <div className="action add" onClick={this.addImage}>
+                    <img src={plus} />
+                </div>
+                <div className="action add" onClick={this.addText}>
+                    <img src={plus} />
+                </div>
             </div>
-        </div>
-    );
+        );
+    } 
 
-};
+}
 
 export default Toolkit;

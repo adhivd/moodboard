@@ -24,23 +24,23 @@ class Canvas extends Component {
         }
     }
 
-    addBlock = () => {
-        console.log("block added");
+    addBlock = (type) => {
+        console.log("block added", type);
         let newBlock = <Block 
-                            contentType="img"
+                            contentType={type}
                             dataUrl="https://media.giphy.com/media/kEEd75zRpcgBidBttQ/giphy-downsized-large.gif"
                             initLeft={this.state.lastLeft}
                             initTop={this.state.lastTop}
                         />
         
         let prevBlockList = this.state.blockList;
-        let left = this.state.lastLeft + 100;
-        let top = this.state.lastTop + 100;
+        let left = this.state.lastLeft;
+        let top = this.state.lastTop;
         prevBlockList.push(newBlock);
         this.setState({
             blockList: prevBlockList,
-            lastLeft: left,
-            lastTop: top,
+            lastLeft: left + 50,
+            lastTop: top + 50,
         }, () => {
             console.log(this.state.blockList);
         });
