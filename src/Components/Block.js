@@ -35,7 +35,7 @@ class Block extends Component {
 					rotateAngle: 0,
 					contentType: props.contentType,
 					dataUrl: props.dataUrl,
-					focused: true,
+					focused: this.props.isFocused,
 				}          
 		}
 			
@@ -70,12 +70,12 @@ class Block extends Component {
 		}
 
 		handleClick = (e) => {
-			console.log("click event", e)
-			console.log("target", e.target)
 
-			this.setState({
-				focused: false
-			});
+			this.props.setFocusedBlock(e);
+
+			// this.setState({
+			// 	focused: !this.state.focused,
+			// });
 		}
 		
 		render() {
@@ -116,6 +116,7 @@ class Block extends Component {
 				<div
 					onClick={this.handleClick}
 					className={focusClass}
+					uuidkey={this.props.uuidkey}
 				>
 					{content}
 					<ResizableRect
