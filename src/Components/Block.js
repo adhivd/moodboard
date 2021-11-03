@@ -71,9 +71,11 @@ class Block extends Component {
 		handleClick = (e) => {
 
 			// make sure the click is on the BLOCK. not a handler
+			// TODO: rewrite clicking logic so that it's less spread out across the app
 			console.log("handle click e", e.target.classList);
 
-			if(e.target.classList.contains("resizable-handler")) {
+			if(e.target.classList.contains("resizable-handler") 
+							|| e.target.nodeName == "I") {
 				return	
 			}
 

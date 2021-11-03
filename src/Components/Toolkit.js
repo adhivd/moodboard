@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import plus from '../content/img/plus.png';
-
+import text from '../content/img/text.png';
+import img from '../content/img/img.png';
 
 
 
@@ -26,10 +27,10 @@ class Toolkit extends Component {
         return (
             <div className="toolkit">
                 <div className="action add" onClick={this.addImage}>
-                    <img src={plus} />
+                    <img src={img} />
                 </div>
                 <div className="action add" onClick={this.addText}>
-                    <img src={plus} />
+                    <img src={text} />
                 </div>
             </div>
         );
