@@ -30,12 +30,12 @@ class Block extends Component {
 			this.state = {
 					width: 100,
 					height: 100,
+					uuidkey: this.props.uuidkey,
 					top: props.initTop,
 					left: props.initLeft,
 					rotateAngle: 0,
 					contentType: props.contentType,
 					dataUrl: props.dataUrl,
-					focused: this.props.isFocused,
 				}          
 		}
 			
@@ -108,7 +108,7 @@ class Block extends Component {
 			// the idea here is that if the block receives focus, it should remove the class that disables the focus styling
 
 			let focusClass = "notFocused";
-			if(this.state.focused) {
+			if(this.props.focusedBlockKey == this.state.uuidkey) {
 				focusClass = "";
 			}
 

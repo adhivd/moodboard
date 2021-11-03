@@ -19,7 +19,6 @@ class Canvas extends Component {
             activeBlockRef: null,
             browserWidth: width,
             browserHeight: height,
-            blockList: [],
             blockMap: {},
             lastLeft: 100,
             lastTop: 100,
@@ -28,14 +27,8 @@ class Canvas extends Component {
     }
 
     setFocusedBlock = (e) => {
-        console.log("event", e);
-
-        console.log(e.target.parentNode.attributes.uuidkey.value);
-
         let k = e.target.parentNode.attributes.uuidkey.value;
 
-        console.log("block found:", this.state.blockMap[k], this.state.blockMap);
-        
         this.setState({
             focusedBlockKey: k,
         }, () => {
@@ -49,43 +42,72 @@ class Canvas extends Component {
     addBlock = (type) => {
         console.log("block added", type);
         let id = uuidv4();
-        let newBlock = <Block 
-                            contentType={type}
-                            dataUrl="https://media.giphy.com/media/kEEd75zRpcgBidBttQ/giphy-downsized-large.gif"
-                            initLeft={this.state.lastLeft}
-                            initTop={this.state.lastTop}
-                            setFocusedBlock={this.setFocusedBlock}
-                            focusedBlockKey={this.state.focusedBlockKey}
-                            key={id}
-                            uuidkey={id}
-                        />
+        let newBlockData = {
+            contentType: type,
+            dataUrl: "https://media.giphy.com/media/kEEd75zRpcgBidBttQ/giphy-downsized-large.gif",
+            uuidkey: id,
+        }
+                        // old: block component data
+                        // <Block 
+                        //     contentType={type}
+                        //     dataUrl="https://media.giphy.com/media/kEEd75zRpcgBidBttQ/giphy-downsized-large.gif"
+                        //     initLeft={this.state.lastLeft}
+                        //     initTop={this.state.lastTop}
+                        //     setFocusedBlock={this.setFocusedBlock}
+                        //     focusedBlockKey={this.state.focusedBlockKey}
+                        //     key={id}
+                        //     uuidkey={id}
+                        // />
         
         // copy copy copy
-        let prevBlockList = this.state.blockList;
         let prevBlockMap = this.state.blockMap;
-        let left = this.state.lastLeft;
+        let left = this.state.lastLeft; // can probably just move this to state I think
         let top = this.state.lastTop;
 
         // push to list + map
-        prevBlockList.push(newBlock);
-        prevBlockMap[id] = newBlock;
+        prevBlockMap[id] = newBlockData;
 
         // set state
         this.setState({
-            blockList: prevBlockList,
             blockMap: prevBlockMap,
             lastLeft: left + 50,
             lastTop: top + 50,
+            focusedBlockKey: id,
         }, () => {
-            // set focus here?
-            console.log("BLOCKMAP IS IN", this.state.blockMap);
+            console.log("blockmap updated:", this.state.blockMap);
         });
     }
    
 
     render() {
 
-        let blockList = this.state.blockList;
+        let renderBlocks = [];
+
+        //  this part is a WIP
+        for (let k in this.state.blockMap) {
+            let block = this.state.blockMap[k];
+            console.log("block in for loop: ", block)
+
+            renderBlocks.push(<Block     
+                                    contentType={block.contentType}
+                                    dataUrl={block.dataUrl}
+                                    initLeft={this.state.lastLeft}
+                                    initTop={this.state.lastTop}
+                                    setFocusedBlock={this.setFocusedBlock}
+                                    focusedBlockKey={this.state.focusedBlockKey}
+                                    key={block.uuidkey}
+                                    uuidkey={block.uuidkey}
+                                />)
+        }
+
+        console.log("renderBlocks array: ", renderBlocks);
+
+        // 😵 commented out for now since .map isn't a thing for objects
+        // let blockList = this.state.blockMap.map(
+        //     (block) => {
+                
+        //     }
+        // )
 
         return (
             <div>
@@ -93,13 +115,7 @@ class Canvas extends Component {
                     addBlock={this.addBlock}
                 
                 />
-                {blockList.map((el) => {
-                    console.log("el: ", el);
-                    // if(el.key == this.state.focusedBlockKey) {
-                    //     el.props.isFocused = true;
-                    // }
-                    return el;
-                })}
+                {renderBlocks}
             </div>
         );
     }    
