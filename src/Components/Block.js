@@ -1,11 +1,10 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component, Fragment } from 'react';
 import Draggable from 'react-draggable';
 import ResizableRect from 'react-resizable-rotatable-draggable';
 import DynamicImage from './DynamicImage';
 import DynamicText from './DynamicText';
+import OutsideAlerter from './OutsideAlerter';
 import './../style/Canvas.scss';
-
-
 
 
 
@@ -71,6 +70,13 @@ class Block extends Component {
 
 		handleClick = (e) => {
 
+			// make sure the click is on the BLOCK. not a handler
+			console.log("handle click e", e.target.classList);
+
+			if(e.target.classList.contains("resizable-handler")) {
+				return	
+			}
+
 			this.props.setFocusedBlock(e);
 
 			// this.setState({
@@ -118,29 +124,34 @@ class Block extends Component {
 					className={focusClass}
 					uuidkey={this.props.uuidkey}
 				>
-					{content}
-					<ResizableRect
-						left={left}
-						top={top}
-						width={width}
-						height={height}
-						rotateAngle={rotateAngle}
-						isFocused={this.focused}
-						// aspectRatio={false}
-						// minWidth={10}
-						// minHeight={10}
-						zoomable='n, w, s, e, nw, ne, se, sw'
-						// rotatable={true}
-						// onRotateStart={this.handleRotateStart}
-						onRotate={this.handleRotate}
-						// onRotateEnd={this.handleRotateEnd}
-						// onResizeStart={this.handleResizeStart}
-						onResize={this.handleResize}
-						// onResizeEnd={this.handleUp}
-						// onDragStart={this.handleDragStart}
-						onDrag={this.handleDrag}
-						// onDragEnd={this.handleDragEnd}
+					<OutsideAlerter
+						uuidkey={this.props.uuidkey}
+						removeAllFocus={this.props.removeAllFocus}
+					>
+						{content}
+						<ResizableRect
+							left={left}
+							top={top}
+							width={width}
+							height={height}
+							rotateAngle={rotateAngle}
+							isFocused={this.focused}
+							// aspectRatio={false}
+							// minWidth={10}
+							// minHeight={10}
+							zoomable='n, w, s, e, nw, ne, se, sw'
+							// rotatable={true}
+							// onRotateStart={this.handleRotateStart}
+							onRotate={this.handleRotate}
+							// onRotateEnd={this.handleRotateEnd}
+							// onResizeStart={this.handleResizeStart}
+							onResize={this.handleResize}
+							// onResizeEnd={this.handleUp}
+							// onDragStart={this.handleDragStart}
+							onDrag={this.handleDrag}
+							// onDragEnd={this.handleDragEnd}
 						/>
+					</OutsideAlerter>
 				</div> 
 			)
 		}

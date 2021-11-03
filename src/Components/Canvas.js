@@ -27,6 +27,7 @@ class Canvas extends Component {
     }
 
     setFocusedBlock = (e) => {
+        console.log("setfocusedblock e: ", e);
         let k = e.target.parentNode.attributes.uuidkey.value;
 
         this.setState({
@@ -39,14 +40,21 @@ class Canvas extends Component {
         // ideally some code in here that finds the element in the blockMap and edits the "FOCUSED" key?
     }
 
+    removeAllFocus = () => {
+        this.setState({
+            focusedBlockKey: null,
+        });
+    }
+
     addBlock = (type) => {
         console.log("block added", type);
         let id = uuidv4();
         let newBlockData = {
             contentType: type,
-            dataUrl: "https://media.giphy.com/media/kEEd75zRpcgBidBttQ/giphy-downsized-large.gif",
+            dataUrl: "https://media0.giphy.com/media/lq4SpTymEjam5xbE5x/giphy.gif?cid=790b76119ec1ef89d01d6bbd0c82c4ed2804909c4b4095e9&rid=giphy.gif&ct=g",
             uuidkey: id,
         }
+
                         // old: block component data
                         // <Block 
                         //     contentType={type}
@@ -94,6 +102,7 @@ class Canvas extends Component {
                                     initLeft={this.state.lastLeft}
                                     initTop={this.state.lastTop}
                                     setFocusedBlock={this.setFocusedBlock}
+                                    removeAllFocus={this.removeAllFocus}
                                     focusedBlockKey={this.state.focusedBlockKey}
                                     key={block.uuidkey}
                                     uuidkey={block.uuidkey}
