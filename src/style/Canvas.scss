@@ -47,11 +47,63 @@
         }
     }
 
+   
+
 
 }
+
+.giphyModal {
+    height: 500px;
+    overflow:auto;
+    position: absolute;
+    // background-color: red;
+    border: 1px solid rgb(227, 227, 227);
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 13px 0 0 rgb(50 50 93 / 0%), 0 8px 17px -8px rgb(0 0 0 / 30%);
+    left: 200px;
+    top: 100px;
+    
+    text-align:center;
+
+    input {
+        box-sizing: border-box;
+            margin: 0;
+            padding: 10px 10px;
+            width: 100%;
+            border: 1px solid gray;
+            border-radius: 3px;
+            font-size: 15px;
+            margin: 0 0 15px 0;
+    }
+
+    // little triangle thing from adhiv.com. gave up with overflow css
+    // &:before {
+    //     content: "";
+    //     top: 55px;
+    //     left: 17px;
+    //     content: "";
+    //     display: block;
+    //     width: 10px;
+    //     height: 10px;
+    //     -webkit-transform: rotate(45deg);
+    //     transform: rotate(45deg);
+    //     transition: all .8s ease;
+    //     position: absolute;
+    //     background-color: #1e1e1e;
+    // }
+}   
 
 .notFocused {
     .dvNrkR {
         display: none !important;
     }
+}
+
+img {
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
