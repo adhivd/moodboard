@@ -92,7 +92,9 @@ class Block extends Component {
 
 			const {width, top, left, height, rotateAngle} = this.state
 
-			if(this.state.contentType =="img") {
+			console.log("check here", this.state.dataUrl)
+
+			if(this.state.contentType =="img" || this.state.contentType=="gif" ) {
 				content = <DynamicImage 
 					left={left}
 					top={top}
@@ -111,6 +113,7 @@ class Block extends Component {
 					rotateAngle={rotateAngle}
 				/>
 			}
+
 
 			// 🧘‍♀️🧘‍♀️🧘‍♀️ focus stuff
 			// the idea here is that if the block receives focus, it should remove the class that disables the focus styling

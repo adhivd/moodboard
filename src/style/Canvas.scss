@@ -58,6 +58,7 @@
     position: absolute;
     // background-color: red;
     border: 1px solid rgb(227, 227, 227);
+    background-color: white;
     padding: 15px;
     border-radius: 5px;
     box-shadow: 0 13px 0 0 rgb(50 50 93 / 0%), 0 8px 17px -8px rgb(0 0 0 / 30%);
@@ -66,15 +67,81 @@
     
     text-align:center;
 
-    input {
-        box-sizing: border-box;
+
+    .gifStickerSwitcher {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .option {
+            width: 45%;
+            border: 1px solid blue;
+            border-radius: 2px;
+            padding: 5px;
+            cursor: pointer;
+            // margin: 0 5px;
+
+        }
+
+        .selected {
+            background-color: blue;
+            color: white;
+        }
+    } 
+
+    .search {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 15px;    
+
+        input {
+            box-sizing: border-box;
             margin: 0;
             padding: 10px 10px;
-            width: 100%;
             border: 1px solid gray;
             border-radius: 3px;
             font-size: 15px;
-            margin: 0 0 15px 0;
+            width: 100%;
+        }
+
+        .searchButton {
+            margin: 0 0 0 5px;
+            position: absolute;
+            display: block;
+            background-color: #0095ff;
+            width: 55px;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s all ease;
+            opacity: 0.8;
+
+            &:hover {
+                // background-color: #0088e8;
+                opacity:1;
+                // box-shadow: 0 13px 0 0 rgb(50 50 93 / 0%), 0 8px 17px -8px rgb(0 0 0 / 30%);
+
+            }
+
+            img {
+                width: 20px;
+                filter: brightness(0) invert(1);
+                width: 20px;
+                filter: brightness(0) invert(1);
+                position: relative;
+                top: 9px;
+                
+                // position: absolute;
+                // top: 0;
+                // bottom: 0;
+                // left: 0;
+                // right: 0;
+                // margin: auto;
+            }
+        }
+
+        
+        
     }
 
     // little triangle thing from adhiv.com. gave up with overflow css

@@ -4,6 +4,7 @@ import plus from '../content/img/plus.png';
 import text from '../content/img/text.png';
 import img from '../content/img/img.png';
 import gif from '../content/img/gif.png'
+
 import './../style/Canvas.scss';
 
 
@@ -32,8 +33,10 @@ class Toolkit extends Component {
         });
     }
 
-    addGif = () => {
-        this.props.addBlock('gif');
+    addGif = (dataUrl) => {
+        this.props.addBlock('gif', dataUrl);
+        console.log("url: ", dataUrl)
+        // images.original.url
     }
 
     render() {
@@ -41,7 +44,7 @@ class Toolkit extends Component {
 
         if(this.state.giphyModalOpen) {
             giphyModal = <GiphyTool 
-                
+                addGif={this.addGif}
             />
         }
 

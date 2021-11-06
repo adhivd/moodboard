@@ -46,12 +46,12 @@ class Canvas extends Component {
         });
     }
 
-    addBlock = (type) => {
+    addBlock = (type, dataUrl) => {
         console.log("block added", type);
         let id = uuidv4();
         let newBlockData = {
             contentType: type,
-            dataUrl: "https://media0.giphy.com/media/lq4SpTymEjam5xbE5x/giphy.gif?cid=790b76119ec1ef89d01d6bbd0c82c4ed2804909c4b4095e9&rid=giphy.gif&ct=g",
+            dataUrl: dataUrl,
             uuidkey: id,
         }
 
