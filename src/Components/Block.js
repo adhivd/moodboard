@@ -72,8 +72,6 @@ class Block extends Component {
 
 			// make sure the click is on the BLOCK. not a handler
 			// TODO: rewrite clicking logic so that it's less spread out across the app
-			console.log("handle click e", e.target.classList);
-
 			if(e.target.classList.contains("resizable-handler") 
 							|| e.target.nodeName == "I") {
 				return	
@@ -91,8 +89,6 @@ class Block extends Component {
 			let content;
 
 			const {width, top, left, height, rotateAngle} = this.state
-
-			console.log("check here", this.state.dataUrl)
 
 			if(this.state.contentType =="img" || this.state.contentType=="gif" ) {
 				content = <DynamicImage 

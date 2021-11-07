@@ -27,7 +27,7 @@ class Toolkit extends Component {
         this.props.addBlock('text');
     }
 
-    openGiphyModal = () => {
+    toggleGiphyModal = () => {
         this.setState({
             giphyModalOpen: !this.state.giphyModalOpen,
         });
@@ -35,8 +35,7 @@ class Toolkit extends Component {
 
     addGif = (dataUrl) => {
         this.props.addBlock('gif', dataUrl);
-        console.log("url: ", dataUrl)
-        // images.original.url
+        this.toggleGiphyModal();
     }
 
     render() {
@@ -57,7 +56,7 @@ class Toolkit extends Component {
                     <div className="action add" onClick={this.addText}>
                         <img src={text} />
                     </div>
-                    <div className="action add" onClick={this.openGiphyModal}>
+                    <div className="action add" onClick={this.toggleGiphyModal}>
                         <img src={gif} />
                     </div>
                 </div>

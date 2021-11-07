@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect } from 'react';
 import Toolkit from './Toolkit'
 import Draggable from 'react-draggable';
 import Block from './Block';
@@ -26,15 +26,31 @@ class Canvas extends Component {
         }
     }
 
+    componentDidMount() {
+        document.addEventListener("keydown", this.deleteDetect, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.deleteDetect, false);
+    }
+
+    deleteDetect = (e) => {
+            if((e.keyCode == 8 || e.keyCode === 46) && this.state.focusedBlockKey != null) {
+                delete this.state.blockMap[this.state.focusedBlockKey];
+                this.setState({
+                    focusedBlockKey: null
+                })
+            }
+    }
+
     setFocusedBlock = (e) => {
-        console.log("setfocusedblock e: ", e);
         let k = e.target.parentNode.attributes.uuidkey.value;
 
         this.setState({
             focusedBlockKey: k,
         }, () => {
-            console.log("focused key set", k);
-            console.log("elements: ", this.state.blockMap);
+            // console.log("focused key set", k);
+            // console.log("elements: ", this.state.blockMap);
         })
         
         // ideally some code in here that finds the element in the blockMap and edits the "FOCUSED" key?
@@ -46,8 +62,18 @@ class Canvas extends Component {
         });
     }
 
+    // useKeypress = (key, action) => {
+    //     useEffect(() => {
+    //       function onKeyup(e) {
+    //         console.log("E:", e);
+    //         if (e.key === key) action()
+    //       }
+    //       window.addEventListener('keyup', onKeyup);
+    //       return () => window.removeEventListener('keyup', onKeyup);
+    //     }, []);
+    //   }
+
     addBlock = (type, dataUrl) => {
-        console.log("block added", type);
         let id = uuidv4();
         let newBlockData = {
             contentType: type,
@@ -82,7 +108,7 @@ class Canvas extends Component {
             lastTop: top + 50,
             focusedBlockKey: id,
         }, () => {
-            console.log("blockmap updated:", this.state.blockMap);
+            // console.log("blockmap updated:", this.state.blockMap);
         });
     }
    
@@ -94,7 +120,6 @@ class Canvas extends Component {
         //  this part is a WIP
         for (let k in this.state.blockMap) {
             let block = this.state.blockMap[k];
-            console.log("block in for loop: ", block)
 
             renderBlocks.push(<Block     
                                     contentType={block.contentType}
@@ -108,8 +133,6 @@ class Canvas extends Component {
                                     uuidkey={block.uuidkey}
                                 />)
         }
-
-        console.log("renderBlocks array: ", renderBlocks);
 
         // 😵 commented out for now since .map isn't a thing for objects
         // let blockList = this.state.blockMap.map(
