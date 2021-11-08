@@ -35,6 +35,8 @@ class Block extends Component {
 					rotateAngle: 0,
 					contentType: props.contentType,
 					dataUrl: props.dataUrl,
+					editable: false,
+					clickTimer: null,
 				}          
 		}
 			
@@ -68,16 +70,51 @@ class Block extends Component {
 			})
 		}
 
-		handleClick = (e) => {
+		// onClickHandler = event => {
+		// 	clearTimeout(this.state.timer);
+		// 	if (event.detail === 1) {
+		// 		timer = setTimeout(this.props.onClick, 200)
+		// 	} else if (event.detail === 2) {
+		// 		this.props.onDoubleClick()
+		// 	}
+		// }
 
-			// make sure the click is on the BLOCK. not a handler
-			// TODO: rewrite clicking logic so that it's less spread out across the app
+		handleClick = (e) => {
+			clearTimeout(this.state.clickTimer);
 			if(e.target.classList.contains("resizable-handler") 
-							|| e.target.nodeName == "I") {
+				|| e.target.nodeName == "I") {
 				return	
 			}
 
 			this.props.setFocusedBlock(e);
+
+			if(e.detail == 1) {
+				this.setState({
+					clickTimer: setTimeout(() => { console.log("yuh bb")}, 200),
+					editable: false,
+				})
+			}
+			else if(e.detail == 2) {
+				console.log("oh yepppppp");
+				this.setState({
+					editable: true,
+				})
+			}
+			// make sure the click is on the BLOCK. not a handler
+			// TODO: rewrite clicking logic so that it's less spread out across the app
+
+
+			// console.log("this is thie click")
+
+			// let k = e.target.parentNode.attributes.uuidkey.value;
+
+			// // handle text block example
+			// if(this.props.contentType == 'text' && this.props.focusedBlockKey == this.state.uuidkey) {
+			// 	// console.log("hmmm something should happen here")
+				
+			// }
+
+			
 
 			// this.setState({
 			// 	focused: !this.state.focused,
@@ -90,6 +127,8 @@ class Block extends Component {
 
 			const {width, top, left, height, rotateAngle} = this.state
 
+			let isFocused = this.props.focusedBlockKey == this.state.uuidkey;
+
 			if(this.state.contentType =="img" || this.state.contentType=="gif" ) {
 				content = <DynamicImage 
 					left={left}
@@ -98,6 +137,7 @@ class Block extends Component {
 					height={height}
 					rotateAngle={rotateAngle}
 					dataUrl={this.state.dataUrl}
+					isFocused={isFocused}
 				/>
 			}
 			else if(this.state.contentType =="text") {
@@ -107,6 +147,8 @@ class Block extends Component {
 					width={width}
 					height={height}
 					rotateAngle={rotateAngle}
+					isEditable={this.state.editable}
+					isFocused={isFocused}
 				/>
 			}
 
@@ -115,7 +157,7 @@ class Block extends Component {
 			// the idea here is that if the block receives focus, it should remove the class that disables the focus styling
 
 			let focusClass = "notFocused";
-			if(this.props.focusedBlockKey == this.state.uuidkey) {
+			if(isFocused) {
 				focusClass = "";
 			}
 
@@ -136,7 +178,7 @@ class Block extends Component {
 							width={width}
 							height={height}
 							rotateAngle={rotateAngle}
-							isFocused={this.focused}
+							isFocused={isFocused}
 							// aspectRatio={false}
 							// minWidth={10}
 							// minHeight={10}
