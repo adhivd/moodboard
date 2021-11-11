@@ -6,9 +6,6 @@ import DynamicText from './DynamicText';
 import OutsideAlerter from './OutsideAlerter';
 import './../style/Canvas.scss';
 
-
-
-
 class Block extends Component {
 	constructor(props) {
 			super(props);
@@ -30,15 +27,25 @@ class Block extends Component {
 					width: 100,
 					height: 100,
 					uuidkey: this.props.uuidkey,
+					focusedBlockKey: this.props.focusedBlockKey,
 					top: props.initTop,
 					left: props.initLeft,
 					rotateAngle: 0,
 					contentType: props.contentType,
 					dataUrl: props.dataUrl,
-					editable: false,
+					editable: true,
 					clickTimer: null,
 				}          
 		}
+
+		componentDidUpdate(prevProps, prevState) {
+            if (prevProps.focusedBlockKey !== this.props.focusedBlockKey && prevProps.focusedBlockKey == this.state.uuidkey) {
+                console.log("asdjfalksdjf")
+				this.setState({
+					editable: false,
+				})
+            }
+    }
 			
 		
 		handleResize = (style, isShiftKey, type) => {
@@ -157,7 +164,7 @@ class Block extends Component {
 			// the idea here is that if the block receives focus, it should remove the class that disables the focus styling
 
 			let focusClass = "notFocused";
-			if(isFocused) {
+			if(isFocused && !this.state.editable) {
 				focusClass = "";
 			}
 
@@ -194,6 +201,8 @@ class Block extends Component {
 							onDrag={this.handleDrag}
 							// onDragEnd={this.handleDragEnd}
 						/>
+
+						{/* { TODO: IMPLEMENT RESIZABLE RECT AROUND THE CONTENT LMFAO} */}
 					</OutsideAlerter>
 				</div> 
 			)

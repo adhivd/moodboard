@@ -1,8 +1,6 @@
 import { COMMENT_KEYS } from '@babel/types';
-import React, {Component, Fragment, useState} from 'react';
-import Draggable from 'react-draggable';
-import ResizableRect from 'react-resizable-rotatable-draggable';
-
+import React, {Component, Fragment, useState, useRef} from 'react';
+import ContentEditable from 'react-contenteditable'
 
 
 
@@ -17,12 +15,13 @@ const DynamicText = (props) => {
         left: props.left,
         width: props.width,
         height: props.height,
-        font: 'sans-serif',
-        fontWeight: '900',
+        fontFamily: 'Helvetica, sans-serif',
+        textAlign: 'center',
         fontSize: '40px',
         transform: 'rotate(' + props.rotateAngle + 'deg)',
         zIndex: 5,
         padding: 0,
+        margin:0,
     }
 
     let textStyle = {
@@ -31,27 +30,44 @@ const DynamicText = (props) => {
         left: props.left,
         width: props.width,
         height: props.height,
-        font: 'sans-serif',
+        fontFamily: 'Helvetica, sans-serif',
+        textAlign: 'center',
+        display: 'inline-block',
         fontSize: '40px',
+        border: '1px solid transparent',
         transform: 'rotate(' + props.rotateAngle + 'deg)',
         zIndex: -1,
         padding: 0,
+        margin:0,
+        
     }
 
-    let renderText;
+    const text = useRef('<p>okay</p>');
 
-    if(props.isEditable) {
-        console.log("this is editable")
-        // setZHook(5);
-        renderText = (<input style={editabletextStyle} onInput={e => setInput(e.target.value)} value={textValue} />);
-    }
-    else {
-        console.log("not editable")
-        // setZHook(-1);
-        renderText = (<p style={textStyle}>{textValue}</p>);
-    }
+	const handleChange = e => {
+		text.current = e.target.value;
+	};
 
-    return renderText
+	const handleBlur = () => {
+		console.log(text.current);
+	};
+
+  	return <ContentEditable
+				html={text.current}
+				onChange={handleChange} 
+				style={textStyle}
+			/>
+
+    // let renderText;
+
+    // if(props.isEditable) {
+    //     renderText = (<textarea autoFocus style={editabletextStyle} onInput={e => setInput(e.target.value)} value={textValue} />);
+    // }
+    // else {
+    //     renderText = (<p style={textStyle}>{textValue}</p>);
+    // }
+
+    // return renderText
 
 };
 

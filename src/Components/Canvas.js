@@ -44,7 +44,8 @@ class Canvas extends Component {
     }
 
     setFocusedBlock = (e) => {
-        let k = e.target.parentNode.attributes.uuidkey.value;
+        console.log(e);
+        let k = e.target.parentNode.parentNode.attributes.uuidkey.value;
 
         this.setState({
             focusedBlockKey: k,

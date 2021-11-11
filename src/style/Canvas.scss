@@ -174,3 +174,19 @@ img {
     -webkit-user-select: none;
     user-select: none;
 }
+
+
+textarea {
+
+    white-space: pre-wrap !important;
+
+    &:focus {
+        border: 1px solid red;
+        outline: none !important;
+      }
+
+    &:focus-visible {
+        border: 1px solid red;
+        outline: none !important;
+    }
+}
