@@ -22,7 +22,8 @@ class Canvas extends Component {
             blockMap: {},
             lastLeft: 100,
             lastTop: 100,
-            focusedBlockKey : null
+            focusedBlockKey : null,
+            textEditMode: false,
         }
     }
 
@@ -34,8 +35,16 @@ class Canvas extends Component {
         document.removeEventListener("keydown", this.deleteDetect, false);
     }
 
+    toggleTextEditMode = (val) => {
+        this.setState({
+            textEditMode: val,
+        })
+    }
+
     deleteDetect = (e) => {
-            if((e.keyCode == 8 || e.keyCode === 46) && this.state.focusedBlockKey != null) {
+            if((e.keyCode == 8 || e.keyCode === 46) 
+                    && this.state.focusedBlockKey != null 
+                    && !this.state.textEditMode) {
                 delete this.state.blockMap[this.state.focusedBlockKey];
                 this.setState({
                     focusedBlockKey: null
@@ -108,6 +117,7 @@ class Canvas extends Component {
                                     focusedBlockKey={this.state.focusedBlockKey}
                                     key={block.uuidkey}
                                     uuidkey={block.uuidkey}
+                                    toggleTextEditMode={this.toggleTextEditMode}
                                 />)
         }
 

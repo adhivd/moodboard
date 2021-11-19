@@ -28,7 +28,7 @@ class Block extends Component {
 				height = 100;
 			}
 			else if(props.contentType == "text") {
-				width = 200;
+				width = 250;
 				height = 100;
 			}
 
@@ -49,11 +49,14 @@ class Block extends Component {
 
 		componentDidUpdate(prevProps, prevState) {
             if (prevProps.focusedBlockKey !== this.props.focusedBlockKey && prevProps.focusedBlockKey == this.state.uuidkey) {
-                console.log("asdjfalksdjf")
 				this.setState({
 					editable: false,
 				})
             }
+
+			if(prevState.editable != this.state.editable) {
+				this.props.toggleTextEditMode(this.state.editable);
+			}
     }
 			
 		
@@ -116,30 +119,10 @@ class Block extends Component {
 				})
 			}
 			else if(e.detail == 2) {
-				console.log("askdjfasldjkf")
 				this.setState({
 					editable: true,
 				})
 			}
-			// make sure the click is on the BLOCK. not a handler
-			// TODO: rewrite clicking logic so that it's less spread out across the app
-
-
-			// console.log("this is thie click")
-
-			// let k = e.target.parentNode.attributes.uuidkey.value;
-
-			// // handle text block example
-			// if(this.props.contentType == 'text' && this.props.focusedBlockKey == this.state.uuidkey) {
-			// 	// console.log("hmmm something should happen here")
-				
-			// }
-
-			
-
-			// this.setState({
-			// 	focused: !this.state.focused,
-			// });
 		}
 		
 		render() {
