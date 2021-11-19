@@ -23,9 +23,18 @@ class Block extends Component {
 
 			img.src = props.dataUrl;
 
+			if(props.contentType == "img" || props.contentType=="gif") {
+				width = 100;
+				height = 100;
+			}
+			else if(props.contentType == "text") {
+				width = 200;
+				height = 100;
+			}
+
 			this.state = {
-					width: 100,
-					height: 100,
+					width: width,
+					height: height,
 					uuidkey: this.props.uuidkey,
 					focusedBlockKey: this.props.focusedBlockKey,
 					top: props.initTop,
@@ -33,7 +42,7 @@ class Block extends Component {
 					rotateAngle: 0,
 					contentType: props.contentType,
 					dataUrl: props.dataUrl,
-					editable: true,
+					editable: false,
 					clickTimer: null,
 				}          
 		}
@@ -89,20 +98,25 @@ class Block extends Component {
 		handleClick = (e) => {
 			clearTimeout(this.state.clickTimer);
 			if(e.target.classList.contains("resizable-handler") 
-				|| e.target.nodeName == "I") {
+				|| (e.target.nodeName == "I" && e.target.parentNode.classList.contains("rotate"))) {
 				return	
 			}
 
 			this.props.setFocusedBlock(e);
 
-			if(e.detail == 1) {
+			// the logic below this if statement only applies to text logic (for now)
+			if(this.state.contentType == "img" || this.state.contentType == "gif") {
+				return;
+			}
+
+			if(e.detail == 1 && !this.state.editable) {
 				this.setState({
-					clickTimer: setTimeout(() => { console.log("yuh bb")}, 200),
+					clickTimer: setTimeout(() => {}, 500),
 					editable: false,
 				})
 			}
 			else if(e.detail == 2) {
-				console.log("oh yepppppp");
+				console.log("askdjfasldjkf")
 				this.setState({
 					editable: true,
 				})
@@ -178,6 +192,9 @@ class Block extends Component {
 						uuidkey={this.props.uuidkey}
 						removeAllFocus={this.props.removeAllFocus}
 					>
+						{/* <BlockToolBox 
+						
+						/> */}
 						{content}
 						<ResizableRect
 							left={left}
@@ -201,8 +218,7 @@ class Block extends Component {
 							onDrag={this.handleDrag}
 							// onDragEnd={this.handleDragEnd}
 						/>
-
-						{/* { TODO: IMPLEMENT RESIZABLE RECT AROUND THE CONTENT LMFAO} */}
+						
 					</OutsideAlerter>
 				</div> 
 			)

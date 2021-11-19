@@ -6,24 +6,6 @@ import ContentEditable from 'react-contenteditable'
 
 const DynamicText = (props) => {
 
-    // const [zHook, setZHook] = useState(-1);
-    const [textValue, setInput] = useState("");
-
-    let editabletextStyle = {
-        position: 'absolute',
-        top: props.top, // bc of borders on rect
-        left: props.left,
-        width: props.width,
-        height: props.height,
-        fontFamily: 'Helvetica, sans-serif',
-        textAlign: 'center',
-        fontSize: '40px',
-        transform: 'rotate(' + props.rotateAngle + 'deg)',
-        zIndex: 5,
-        padding: 0,
-        margin:0,
-    }
-
     let textStyle = {
         position: 'absolute',
         top: props.top, // bc of borders on rect
@@ -33,7 +15,7 @@ const DynamicText = (props) => {
         fontFamily: 'Helvetica, sans-serif',
         textAlign: 'center',
         display: 'inline-block',
-        fontSize: '40px',
+        fontSize: '60px',
         border: '1px solid transparent',
         transform: 'rotate(' + props.rotateAngle + 'deg)',
         zIndex: -1,
@@ -42,33 +24,31 @@ const DynamicText = (props) => {
         
     }
 
-    const text = useRef('<p>okay</p>');
+	if(props.isEditable) {
+		textStyle.zIndex = 5;
+	}
+
+    const text = useRef('edit me');
 
 	const handleChange = e => {
 		text.current = e.target.value;
 	};
 
-	const handleBlur = () => {
-		console.log(text.current);
-	};
+	// const handleBlur = () => {
+	// 	console.log("blur", text.current);
+	// };
 
-  	return <ContentEditable
+  	return (
+		  <>
+			 <ContentEditable
 				html={text.current}
 				onChange={handleChange} 
 				style={textStyle}
+				tagName='p'
+				disabled={!props.isEditable}
 			/>
-
-    // let renderText;
-
-    // if(props.isEditable) {
-    //     renderText = (<textarea autoFocus style={editabletextStyle} onInput={e => setInput(e.target.value)} value={textValue} />);
-    // }
-    // else {
-    //     renderText = (<p style={textStyle}>{textValue}</p>);
-    // }
-
-    // return renderText
-
+		  </>
+	  );
 };
 
 export default DynamicText;
