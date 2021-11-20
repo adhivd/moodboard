@@ -2,6 +2,8 @@ import React, {Component, useEffect } from 'react';
 import Toolkit from './Toolkit'
 import Draggable from 'react-draggable';
 import Block from './Block';
+import FileDropZone from './FileDropZone';
+
 import { v4 as uuidv4 } from 'uuid';
 import './../style/Canvas.scss';
 
@@ -24,6 +26,7 @@ class Canvas extends Component {
             lastTop: 100,
             focusedBlockKey : null,
             textEditMode: false,
+            openFunction: null,
         }
     }
 
@@ -97,6 +100,21 @@ class Canvas extends Component {
             focusedBlockKey: id,
         });
     }
+
+    uploadFiles = (files) => {
+        if(files[0]) {
+            this.addBlock("img", files[0].preview);
+        }
+        
+    }
+
+    sendOpenFunction = (open) => {
+        if(!this.state.openFunction) {
+            this.setState({
+                openFunction: open,
+            })
+        }
+    }
    
 
     render() {
@@ -132,9 +150,13 @@ class Canvas extends Component {
             <div>
                 <Toolkit 
                     addBlock={this.addBlock}
-                
+                    receiveOpenFunction={this.state.openFunction}
                 />
                 {renderBlocks}
+                <FileDropZone 
+                    uploadFiles={this.uploadFiles}
+                    sendOpenFunction={this.sendOpenFunction}
+                />
             </div>
         );
     }    

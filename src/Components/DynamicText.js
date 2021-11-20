@@ -25,7 +25,7 @@ const DynamicText = (props) => {
     }
 
 	if(props.isEditable) {
-		textStyle.zIndex = 5;
+		textStyle.zIndex = 0;
 	}
 
     const text = useRef('edit me');

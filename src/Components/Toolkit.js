@@ -19,8 +19,10 @@ class Toolkit extends Component {
 
     }
 
-    addImage = () => {
-        this.props.addBlock('img');
+    uploadImage = () => {
+        if(this.props.receiveOpenFunction) {
+            this.props.receiveOpenFunction()
+        }
     }
     
     addText = () => {
@@ -50,7 +52,7 @@ class Toolkit extends Component {
         return (
             <>
                 <div className="toolkit">
-                    <div className="action add" onClick={this.addImage}>
+                    <div className="action add" onClick={this.uploadImage}>
                         <img src={img} />
                     </div>
                     <div className="action add" onClick={this.addText}>
