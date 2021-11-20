@@ -2,18 +2,15 @@ import React, {useMemo, useState, useEffect } from 'react';
 import {useDropzone} from 'react-dropzone';
 
 const baseStyle = {
-	flex: 1,
-	display: 'flex',
-	flexDirection: 'column',
 	alignItems: 'center',
-	padding: '20px',
 	height: '100%',
+	width: '100%',
+	position: 'fixed',
+	zIndex: -9999,
 	borderWidth: 2,
 	borderRadius: 2,
-	borderColor: '#eeeeee',
+	borderColor: 'transparent',
 	borderStyle: 'dashed',
-	backgroundColor: '#fafafa',
-	color: '#bdbdbd',
 	outline: 'none',
 	transition: 'border .24s ease-in-out'
 };
@@ -76,10 +73,9 @@ function FileDropZone(props) {
   
 
   return (
-    <div className="container">
+    <div className="dropZone">
       <div {...getRootProps({style})}>
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
       </div>
     </div>
   );

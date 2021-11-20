@@ -99,6 +99,7 @@ class Block extends Component {
 		// }
 
 		handleClick = (e) => {
+			console.log("click event", e)
 			clearTimeout(this.state.clickTimer);
 			if(e.target.classList.contains("resizable-handler") 
 				|| (e.target.nodeName == "I" && e.target.parentNode.classList.contains("rotate"))) {

@@ -15,7 +15,7 @@ function useOutsideAlerter(ref, callback) {
         function handleClickOutside(event) {
             if (ref.current && !ref.current.contains(event.target)) {
                 console.log("You clicked outside of me!", event);
-                if(event.target.nodeName == "HTML") {
+                if(event.target.nodeName == "HTML" || event.target.parentNode.className == "dropZone") {
                     callback(); // removeAllFocus() --> Canvas.js
                 }
             }
