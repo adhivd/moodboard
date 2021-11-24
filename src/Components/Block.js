@@ -37,8 +37,8 @@ class Block extends Component {
 					height: height,
 					uuidkey: this.props.uuidkey,
 					focusedBlockKey: this.props.focusedBlockKey,
-					top: props.initTop,
-					left: props.initLeft,
+					top: props.top,
+					left: props.left,
 					rotateAngle: 0,
 					contentType: props.contentType,
 					dataUrl: props.dataUrl,
@@ -86,6 +86,8 @@ class Block extends Component {
 			this.setState({
 				left: this.state.left + deltaX,
 				top: this.state.top + deltaY
+			}, () => {
+				this.props.updateLeftTopBlockLocation(this.state.uuidkey, this.state.left, this.state.top,)
 			})
 		}
 
@@ -99,7 +101,7 @@ class Block extends Component {
 		// }
 
 		handleClick = (e) => {
-			console.log("click event", e)
+			// console.log("click event", e)
 			clearTimeout(this.state.clickTimer);
 			if(e.target.classList.contains("resizable-handler") 
 				|| (e.target.nodeName == "I" && e.target.parentNode.classList.contains("rotate"))) {
@@ -108,22 +110,22 @@ class Block extends Component {
 
 			this.props.setFocusedBlock(e);
 
-			// the logic below this if statement only applies to text logic (for now)
-			if(this.state.contentType == "img" || this.state.contentType == "gif") {
-				return;
+			// double click logic for text blocks
+			if(this.state.contentType == "text") {
+				if(e.detail == 1 && !this.state.editable) {
+					this.setState({
+						clickTimer: setTimeout(() => {}, 500),
+						editable: false,
+					})
+				}
+				else if(e.detail == 2) {
+					this.setState({
+						editable: true,
+					})
+				}
 			}
 
-			if(e.detail == 1 && !this.state.editable) {
-				this.setState({
-					clickTimer: setTimeout(() => {}, 500),
-					editable: false,
-				})
-			}
-			else if(e.detail == 2) {
-				this.setState({
-					editable: true,
-				})
-			}
+			
 		}
 		
 		render() {
@@ -143,6 +145,7 @@ class Block extends Component {
 					rotateAngle={rotateAngle}
 					dataUrl={this.state.dataUrl}
 					isFocused={isFocused}
+					uuidkey={this.props.uuidkey}
 				/>
 			}
 			else if(this.state.contentType =="text") {
@@ -154,6 +157,10 @@ class Block extends Component {
 					rotateAngle={rotateAngle}
 					isEditable={this.state.editable}
 					isFocused={isFocused}
+					uuidkey={this.props.uuidkey}
+					textContent={this.props.textContent}
+					updateTextContent={this.props.updateTextContent}
+					initialText={this.props.initialText}
 				/>
 			}
 

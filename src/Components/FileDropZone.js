@@ -6,7 +6,7 @@ const baseStyle = {
 	height: '100%',
 	width: '100%',
 	position: 'fixed',
-	zIndex: -9999,
+	zIndex: -9999,	
 	borderWidth: 2,
 	borderRadius: 2,
 	borderColor: 'transparent',
@@ -59,7 +59,8 @@ function FileDropZone(props) {
 
   const style = useMemo(() => ({
     ...baseStyle,
-    ...(isDragActive ? activeStyle : {}),
+    ...(isDragActive ? activeStyle : {}),  
+
     ...(isDragAccept ? acceptStyle : {}),
     ...(isDragReject ? rejectStyle : {})
   }), [
@@ -68,16 +69,28 @@ function FileDropZone(props) {
     isDragAccept
   ]);
 
+  let renderDropZoneModal;
+
+  if(isDragActive) {
+	// Taking this out for now but potential code for showing a modal!
+	// renderDropZoneModal = (<div className="dropZoneModal">
+	// 	<p>Release to upload image(s)! </p>
+	// </div>);
+  }
+
 //   console.log("getRootProps:", getRootProps())
 //   console.log("getInputProps:", getInputProps())
   
 
-  return (
-    <div className="dropZone">
-      <div {...getRootProps({style})}>
-        <input {...getInputProps()} />
-      </div>
-    </div>
+return (
+	<>
+		<div className="dropZone">
+			<div {...getRootProps({style})}>
+			<input {...getInputProps()} />
+			</div>
+		</div>
+		{renderDropZoneModal}
+	</>
   );
 }
 

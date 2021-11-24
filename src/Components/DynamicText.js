@@ -28,21 +28,24 @@ const DynamicText = (props) => {
 		textStyle.zIndex = 0;
 	}
 
-    const text = useRef('edit me');
+	
+    let text = useRef(props.textContent ? props.textContent : props.initialText)
 
 	const handleChange = e => {
 		text.current = e.target.value;
+		props.updateTextContent(props.uuidkey, text.current);
 	};
 
-	// const handleBlur = () => {
-	// 	console.log("blur", text.current);
-	// };
+	const handleBlur = () => {
+		console.log("blur", text.current);
+	};
 
   	return (
 		  <>
 			 <ContentEditable
 				html={text.current}
 				onChange={handleChange} 
+				onBlur={handleBlur}
 				style={textStyle}
 				tagName='p'
 				disabled={!props.isEditable}

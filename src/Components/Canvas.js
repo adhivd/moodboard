@@ -22,20 +22,22 @@ class Canvas extends Component {
             browserWidth: width,
             browserHeight: height,
             blockMap: {},
-            lastLeft: 100,
-            lastTop: 100,
+            nextLeft: 100,
+            nextTop: 100,
             focusedBlockKey : null,
+            lastCopiedBlockKey: null,
             textEditMode: false,
             openFunction: null,
+            initialText: "edit me"
         }
     }
 
     componentDidMount() {
-        document.addEventListener("keydown", this.deleteDetect, false);
+        document.addEventListener("keydown", this.keyboardDetect, false);
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.deleteDetect, false);
+        document.removeEventListener("keydown", this.keyboardDetect, false);
     }
 
     toggleTextEditMode = (val) => {
@@ -44,7 +46,43 @@ class Canvas extends Component {
         })
     }
 
-    deleteDetect = (e) => {
+    getBlock = (uuid) => {
+        return this.state.blockMap[uuid]
+    }
+
+    updateTextContent = (uuid, textContent) => {
+        // let blockCopy = this.getBlock(uuid);
+        // blockCopy.textContent = textContent;
+        // this.state.blockMap[uuid] = blockCopy;
+
+        this.setState(prevState => ({
+            blockMap: {
+              ...prevState.blockMap,           // copy all other key-value pairs of blockMap object
+            [uuid]: {                         // specific object of blockMap object
+                ...prevState.blockMap[uuid],   // copy all block key-value pairs
+                textContent: textContent          // update value of specific textContent key
+              }
+            }
+        }))
+    }
+
+    updateLeftTopBlockLocation = (uuid, left, top) => {
+        this.setState(prevState => ({
+            blockMap: {
+              ...prevState.blockMap,           // copy all other key-value pairs of blockMap object
+            [uuid]: {                         // specific object of blockMap object
+                ...prevState.blockMap[uuid],   // copy all block key-value pairs
+                left: left,          
+                top: top,
+              }
+            }
+        }))
+    } 
+
+    keyboardDetect = (e) => {
+            // console.log("detect", e)
+
+            // delete
             if((e.keyCode == 8 || e.keyCode === 46) 
                     && this.state.focusedBlockKey != null 
                     && !this.state.textEditMode) {
@@ -52,6 +90,27 @@ class Canvas extends Component {
                 this.setState({
                     focusedBlockKey: null
                 })
+            }
+
+            // cmd + c
+            else if((e.key == "c" && e.metaKey) && this.state.focusedBlockKey != null) {
+                console.log(this.state.blockMap[this.state.focusedBlockKey]);
+                this.setState(prevState => ({
+                    lastCopiedBlockKey: prevState.focusedBlockKey,
+                    nextLeft: prevState.blockMap[prevState.focusedBlockKey].left + 50,
+                    nextTop: prevState.blockMap[prevState.focusedBlockKey].top + 50
+                }))
+            }
+
+            // cmd + v
+            else if((e.key == "v" && e.metaKey) && this.state.focusedBlockKey != null) {
+                console.log(this.state.blockMap)
+                this.copyBlock(this.state.lastCopiedBlockKey)
+                // let block = this.state.blockMap[]
+                // this.addBlock({},{})
+                // this.setState({
+                    
+                // })
             }
     }
 
@@ -76,18 +135,23 @@ class Canvas extends Component {
         });
     }
 
-    addBlock = (type, dataUrl) => {
+    copyBlock = (uuid) => {
         let id = uuidv4();
+        let blockToCopy = this.getBlock(uuid);
+
         let newBlockData = {
-            contentType: type,
-            dataUrl: dataUrl,
+            contentType: blockToCopy.contentType,
+            dataUrl: blockToCopy.dataUrl,
             uuidkey: id,
-        }
-        
+            textContent: blockToCopy.textContent,
+            left: this.state.nextLeft,
+            top: this.state.nextTop,
+        };
+
         // copy copy copy
         let prevBlockMap = this.state.blockMap;
-        let left = this.state.lastLeft; // can probably just move this to state I think
-        let top = this.state.lastTop;
+        let left = this.state.nextLeft;
+        let top = this.state.nextTop;
 
         // push to list + map
         prevBlockMap[id] = newBlockData;
@@ -95,8 +159,36 @@ class Canvas extends Component {
         // set state
         this.setState({
             blockMap: prevBlockMap,
-            lastLeft: left + 50,
-            lastTop: top + 50,
+            nextLeft: left + 50,
+            nextTop: top + 50,
+            focusedBlockKey: id,
+        });
+    }
+
+    addBlock = (type, dataUrl) => {
+        let id = uuidv4();
+        let newBlockData = {
+            contentType: type,
+            dataUrl: dataUrl,
+            uuidkey: id,
+            textContent: this.state.initialText,
+            left: this.state.nextLeft,
+            top: this.state.nextTop,
+        }
+        
+        // copy blockmap + left + top data from state
+        let prevBlockMap = this.state.blockMap;
+        let left = this.state.nextLeft; // can probably just move this to state I think
+        let top = this.state.nextTop;
+
+        // push to list + map
+        prevBlockMap[id] = newBlockData;
+
+        // set state
+        this.setState({
+            blockMap: prevBlockMap,
+            nextLeft: left + 50,
+            nextTop: top + 50,
             focusedBlockKey: id,
         });
     }
@@ -128,14 +220,18 @@ class Canvas extends Component {
             renderBlocks.push(<Block     
                                     contentType={block.contentType}
                                     dataUrl={block.dataUrl}
-                                    initLeft={this.state.lastLeft}
-                                    initTop={this.state.lastTop}
+                                    left={block.left}
+                                    top={block.top}
+                                    updateLeftTopBlockLocation={this.updateLeftTopBlockLocation}
                                     setFocusedBlock={this.setFocusedBlock}
                                     removeAllFocus={this.removeAllFocus}
                                     focusedBlockKey={this.state.focusedBlockKey}
                                     key={block.uuidkey}
                                     uuidkey={block.uuidkey}
                                     toggleTextEditMode={this.toggleTextEditMode}
+                                    textContent={block.textContent}
+                                    updateTextContent={this.updateTextContent}
+                                    initialText={this.state.initialText}
                                 />)
         }
 
