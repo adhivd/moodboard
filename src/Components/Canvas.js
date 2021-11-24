@@ -7,6 +7,7 @@ import FileDropZone from './FileDropZone';
 import { v4 as uuidv4 } from 'uuid';
 import './../style/Canvas.scss';
 
+// Overall, page spanning component that right now holds: <Tookit> (the toolbar) and renders all the blocks on a page + manages their state with a "blockMap" object
 
 class Canvas extends Component {
 
@@ -79,6 +80,31 @@ class Canvas extends Component {
         }))
     } 
 
+    updateRotateAngle = (uuid, rotateAngle) => {
+        this.setState(prevState => ({
+            blockMap: {
+              ...prevState.blockMap,           // copy all other key-value pairs of blockMap object
+            [uuid]: {                         // specific object of blockMap object
+                ...prevState.blockMap[uuid],   // copy all block key-value pairs
+                rotateAngle: rotateAngle
+              }
+            }
+        }))
+    }
+
+    updateWidthHeight = (uuid, width, height) => {
+        this.setState(prevState => ({
+            blockMap: {
+              ...prevState.blockMap,           // copy all other key-value pairs of blockMap object
+            [uuid]: {                         // specific object of blockMap object
+                ...prevState.blockMap[uuid],   // copy all block key-value pairs
+                width: width,
+                height: height,
+              }
+            }
+        }))
+    }
+
     keyboardDetect = (e) => {
             // console.log("detect", e)
 
@@ -94,23 +120,13 @@ class Canvas extends Component {
 
             // cmd + c
             else if((e.key == "c" && e.metaKey) && this.state.focusedBlockKey != null) {
-                console.log(this.state.blockMap[this.state.focusedBlockKey]);
-                this.setState(prevState => ({
-                    lastCopiedBlockKey: prevState.focusedBlockKey,
-                    nextLeft: prevState.blockMap[prevState.focusedBlockKey].left + 50,
-                    nextTop: prevState.blockMap[prevState.focusedBlockKey].top + 50
-                }))
+                this.copyBlock();
             }
 
             // cmd + v
             else if((e.key == "v" && e.metaKey) && this.state.focusedBlockKey != null) {
                 console.log(this.state.blockMap)
-                this.copyBlock(this.state.lastCopiedBlockKey)
-                // let block = this.state.blockMap[]
-                // this.addBlock({},{})
-                // this.setState({
-                    
-                // })
+                this.pasteBlock()
             }
     }
 
@@ -135,9 +151,24 @@ class Canvas extends Component {
         });
     }
 
-    copyBlock = (uuid) => {
+
+    // called when the user hits cmd + c on their keyboard (from keyboardDetect)
+    // sets a copied block key in state and sets up the next paste location to be offset by 50px (this is a little janky, should fix later)
+    copyBlock = () => {
+        this.setState(prevState => ({
+            lastCopiedBlockKey: prevState.focusedBlockKey,
+            nextLeft: prevState.blockMap[prevState.focusedBlockKey].left + 25,
+            nextTop: prevState.blockMap[prevState.focusedBlockKey].top + 25
+        }));
+    }
+
+
+    // called when the user hits cmd + v on their keyboard (from keyboardDetect)
+    // creates a copy of the block that was last copied from cmd + c and rerenders (with the new copy pasted (+50, +50)px away from the previous loc).
+    pasteBlock = () => {
+        
         let id = uuidv4();
-        let blockToCopy = this.getBlock(uuid);
+        let blockToCopy = this.getBlock(this.state.lastCopiedBlockKey);
 
         let newBlockData = {
             contentType: blockToCopy.contentType,
@@ -146,6 +177,9 @@ class Canvas extends Component {
             textContent: blockToCopy.textContent,
             left: this.state.nextLeft,
             top: this.state.nextTop,
+            rotateAngle: blockToCopy.rotateAngle,
+            width: blockToCopy.width,
+            height: blockToCopy.height,
         };
 
         // copy copy copy
@@ -159,14 +193,18 @@ class Canvas extends Component {
         // set state
         this.setState({
             blockMap: prevBlockMap,
-            nextLeft: left + 50,
-            nextTop: top + 50,
+            nextLeft: left + 25,
+            nextTop: top + 25,
             focusedBlockKey: id,
         });
     }
 
+    // called from Toolkit.js to add a Block (i.e. a gif, img, text box, etc.!)
     addBlock = (type, dataUrl) => {
+
+        // random id
         let id = uuidv4();
+
         let newBlockData = {
             contentType: type,
             dataUrl: dataUrl,
@@ -174,6 +212,9 @@ class Canvas extends Component {
             textContent: this.state.initialText,
             left: this.state.nextLeft,
             top: this.state.nextTop,
+            rotateAngle: 0,
+            width: null,
+            height: null,
         }
         
         // copy blockmap + left + top data from state
@@ -187,8 +228,8 @@ class Canvas extends Component {
         // set state
         this.setState({
             blockMap: prevBlockMap,
-            nextLeft: left + 50,
-            nextTop: top + 50,
+            nextLeft: left + 25,
+            nextTop: top + 25,
             focusedBlockKey: id,
         });
     }
@@ -218,8 +259,14 @@ class Canvas extends Component {
             let block = this.state.blockMap[k];
 
             renderBlocks.push(<Block     
+                                    // prob should batch some of this stuff up
                                     contentType={block.contentType}
                                     dataUrl={block.dataUrl}
+                                    width={block.width}
+                                    height={block.height}
+                                    updateWidthHeight={this.updateWidthHeight}
+                                    rotateAngle={block.rotateAngle}
+                                    updateRotateAngle={this.updateRotateAngle}
                                     left={block.left}
                                     top={block.top}
                                     updateLeftTopBlockLocation={this.updateLeftTopBlockLocation}

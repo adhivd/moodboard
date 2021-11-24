@@ -11,26 +11,35 @@ class Block extends Component {
 			super(props);
 
 			var img = new Image();
-			let height;
+			let height
 			let width;
 
-			img.onload = () => { // hmm should fix this at some point: https://stackoverflow.com/questions/50162522/cant-call-setstate-on-a-component-that-is-not-yet-mounted
+			// if cond: the block was copied, then width/height will equal copied block w/h
+			// else cond: loads the image, and meanwhile sets a default width/height
+			if(props.width && props.height) {
+				width = props.width;
+				height = props.height;
+			}
+			else {
+				img.onload = () => { // hmm should fix this at some point: https://stackoverflow.com/questions/50162522/cant-call-setstate-on-a-component-that-is-not-yet-mounted
 					this.setState({
 							height: img.height,
 							width: img.width,
 					})
-			}
+				}
 
+				// should probably figure out a way to just get img width / height before
+				if(props.contentType == "img" || props.contentType=="gif") {
+					width = 100;
+					height = 100;
+				}
+				else if(props.contentType == "text") {
+					width = 250;
+					height = 100;
+				}
+			}
+			
 			img.src = props.dataUrl;
-
-			if(props.contentType == "img" || props.contentType=="gif") {
-				width = 100;
-				height = 100;
-			}
-			else if(props.contentType == "text") {
-				width = 250;
-				height = 100;
-			}
 
 			this.state = {
 					width: width,
@@ -39,7 +48,7 @@ class Block extends Component {
 					focusedBlockKey: this.props.focusedBlockKey,
 					top: props.top,
 					left: props.left,
-					rotateAngle: 0,
+					rotateAngle: this.props.rotateAngle,
 					contentType: props.contentType,
 					dataUrl: props.dataUrl,
 					editable: false,
@@ -73,21 +82,30 @@ class Block extends Component {
 				left,
 				width,
 				height
+			}, () => {
+				this.props.updateWidthHeight(this.state.uuidkey, width, height)
 			})
+
+
 		}
 
 		handleRotate = (rotateAngle) => {
 			this.setState({
 				rotateAngle
+			}, () => {
+				this.props.updateRotateAngle(this.state.uuidkey, rotateAngle);
+				console.log("rotated", rotateAngle);
 			})
 		}
 	
 		handleDrag = (deltaX, deltaY) => {
+
+			console.log("I am called");
 			this.setState({
 				left: this.state.left + deltaX,
 				top: this.state.top + deltaY
 			}, () => {
-				this.props.updateLeftTopBlockLocation(this.state.uuidkey, this.state.left, this.state.top,)
+				this.props.updateLeftTopBlockLocation(this.state.uuidkey, this.state.left, this.state.top,);
 			})
 		}
 
