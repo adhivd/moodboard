@@ -11,6 +11,13 @@ import ReactGiphySearchbox from 'react-giphy-searchbox'
 
 import './../style/Canvas.scss';
 
+// |     .-.
+// |    /   \         .-.
+// |   /     \       /   \       .-.     .-.     _   _
+// +--/-------\-----/-----\-----/---\---/---\---/-\-/-\/\/---
+// | /         \   /       \   /     '-'     '-'
+// |/           '-'         '-'
+
 
 const GiphyTool = (props) => {
 

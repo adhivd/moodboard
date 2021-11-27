@@ -1,8 +1,28 @@
 import { COMMENT_KEYS } from '@babel/types';
-import React, {Component, Fragment, useState, useRef} from 'react';
+import React, {Component, Fragment, useState, useRef, useMemo} from 'react';
 import ContentEditable from 'react-contenteditable'
 
+// Import the Slate editor factory.
+import { createEditor } from 'slate'
+// Import the Slate components and React plugin.
+import { Slate, Editable, withReact } from 'slate-react'
 
+//									 __    __    __
+//									(__)  (__)  (__)
+//									|  |  |  |  |  |
+//									|  |  |  |  |  |
+//									|  |  |  |  |  |
+//									|  |  |  |  |  |
+//									|  |  |  |  |  |
+//									|  |  |  |  |  |
+//									|  |  |  |  |  |
+//									|  |  |  |  |p |
+//									|  |  |  |  |k |
+//									|  |  |__|  |w |
+//									|  |  |   \ |  |
+//									\  |  |____\|  |
+//									 \ |           |
+//									  \|___________|
 
 const DynamicText = (props) => {
 

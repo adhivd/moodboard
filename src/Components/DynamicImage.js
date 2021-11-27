@@ -2,8 +2,25 @@ import React, {Component, Fragment} from 'react';
 import Draggable from 'react-draggable';
 import ResizableRect from 'react-resizable-rotatable-draggable';
 
-
-
+//          __
+//         / /\
+//        / /  \
+//       / /    \__________
+//      / /      \        /\
+//     /_/        \      / /
+//  ___\ \      ___\____/_/_
+// /____\ \    /___________/\
+// \     \ \   \           \ \
+//  \     \ \   \____       \ \
+//   \     \ \  /   /\       \ \
+//    \   / \_\/   / /        \ \
+//     \ /        / /__________\/
+//      /        / /     /
+//     /        / /     /
+//    /________/ /\    /
+//    \________\/\ \  /
+//                \_\/
+// 
 
 const DynamicImage = (props) => {
 

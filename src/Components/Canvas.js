@@ -7,7 +7,33 @@ import FileDropZone from './FileDropZone';
 import { v4 as uuidv4 } from 'uuid';
 import './../style/Canvas.scss';
 
-// Overall, page spanning component that right now holds: <Tookit> (the toolbar) and renders all the blocks on a page + manages their state with a "blockMap" object
+//      /   __/     /   __/     /   __/     /   __/     /   __/     /   _
+// __   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/ 
+//   \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \__/  \
+// __/     /   __/     /   __/     /   __/     /   __/     /   __/     /
+//   \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \_
+//      \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \__/ 
+//    __/     /   __/     /   __/     /   __/     /   __/     /   __/    
+// __/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__  
+//   \     \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \_
+//   /   __/     /   __/     /   __/     /   __/     /   __/     /   __/
+//   \__/  \__   \__/  \__   \             _/  \__   \__/  \__   \__/  \_
+// __/  \     \__/  \     \__/  canvas.js   \     \__/  \     \__/  \    
+//      /   __/     /   __/                 /   __/     /   __/     /   _
+// __   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/ 
+//   \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \__/  \
+// __/     /   __/     /   __/     /   __/     /   __/     /   __/     /
+//   \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \_
+//      \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \__/ 
+//    __/     /   __/     /   __/     /   __/     /   __/     /   __/    
+// __/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__  
+//   \     \__/  \     \__/  \     \__/  \     \__/  \     \__/  \     \_
+//   /   __/     /   __/     /   __/     /   __/     /   __/     /   __/
+//   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \__   \__/  \_
+// 
+// Page-spanning component that right now holds: <Tookit> (the toolbar) and renders all the blocks on a page + manages their state with a "blockMap" object
+
+
 
 class Canvas extends Component {
 
@@ -24,7 +50,7 @@ class Canvas extends Component {
             browserHeight: height,
             blockMap: {},
             nextLeft: 100,
-            nextTop: 100,
+            nextTop: 150,
             focusedBlockKey : null,
             lastCopiedBlockKey: null,
             textEditMode: false,
@@ -104,6 +130,18 @@ class Canvas extends Component {
             }
         }))
     }
+
+
+    // ._____. ._____.
+    //  ._. | | ._. |
+    // | !_| |_|_|_! |
+    // !___| |_______!
+    // .___|_|_| |___.
+    // | ._____| |_. |
+    // | !_! | | !_! |
+    // !_____! !_____!
+    // 
+    // all keyboard detect logic 
 
     keyboardDetect = (e) => {
             // console.log("detect", e)

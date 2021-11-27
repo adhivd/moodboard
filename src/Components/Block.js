@@ -3,8 +3,28 @@ import Draggable from 'react-draggable';
 import ResizableRect from 'react-resizable-rotatable-draggable';
 import DynamicImage from './DynamicImage';
 import DynamicText from './DynamicText';
+import DynamicTextEditor from './DynamicTextEditor';
+
 import OutsideAlerter from './OutsideAlerter';
 import './../style/Canvas.scss';
+
+//           ________
+//          /\       \
+//         /  \       \
+//        /    \       \
+//       /block.\_______\ 
+//       \  js  /       /
+//     ___\    /   ____/___
+//    /\   \  /   /\       \	
+//   /  \   \/___/  \       \
+//  /    \       \   \       \
+// / ^  ^ \_______\   \_______\
+// \  __  /       /   /       /
+//  \    /       /   /       /
+//   \  /       /\  /       /
+//    \/_______/  \/_______/ 
+//
+// Any individual "thing" (img, gif, text) that renders on the canvas is a Block. Holds state information for blocks and sends the changes back up to Canvas to update the block information stored.
 
 class Block extends Component {
 	constructor(props) {
@@ -85,8 +105,6 @@ class Block extends Component {
 			}, () => {
 				this.props.updateWidthHeight(this.state.uuidkey, width, height)
 			})
-
-
 		}
 
 		handleRotate = (rotateAngle) => {
@@ -99,8 +117,6 @@ class Block extends Component {
 		}
 	
 		handleDrag = (deltaX, deltaY) => {
-
-			console.log("I am called");
 			this.setState({
 				left: this.state.left + deltaX,
 				top: this.state.top + deltaY
@@ -167,7 +183,7 @@ class Block extends Component {
 				/>
 			}
 			else if(this.state.contentType =="text") {
-				content = <DynamicText
+				content = <DynamicTextEditor
 					left={left}
 					top={top}
 					width={width}
@@ -186,9 +202,9 @@ class Block extends Component {
 			// 🧘‍♀️🧘‍♀️🧘‍♀️ focus stuff
 			// the idea here is that if the block receives focus, it should remove the class that disables the focus styling
 
-			let focusClass = "notFocused";
+			let focusClass = "block notFocused";
 			if(isFocused && !this.state.editable) {
-				focusClass = "";
+				focusClass = "block";
 			}
 
 			return (

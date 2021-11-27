@@ -1,3 +1,9 @@
+$bg-img: url('../content/img/rotate.svg');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+
 .toolkit {
 
     position: absolute;
@@ -162,21 +168,104 @@
     // }
 }   
 
+.block {
+    img:hover {
+        outline: 1px solid #00a1ff;
+    }
+}
+
+
+.textEditor {
+
+    &:hover {
+        border: 1px solid #00a1ff !important;
+    }
+
+    blockquote {
+        // margin: 0; old
+        // padding: 15px;
+        // background: #eee;
+        // border-radius: 5px;
+
+        border-left: 2px
+        solid #ddd;
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 10px;
+        color: #aaa;
+    }
+
+}
+
+.DynamicTextEditorToolbar {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: middle;
+    gap: 0 10px;
+    outline: 1px solid #dcdcdc;
+    border-radius: 3px;
+    padding: 5px;
+    background-color:rgba(255, 255, 255, 0.8);
+    
+    
+
+    button {
+        border: none;
+        padding: 0;
+        background-color: transparent;
+        transition: 0.3s all ease-out;
+        width: 25px;
+        height: 25px;
+        border-radius: 3px;
+        line-height: 4px;
+        text-align: center;
+
+        &:hover {
+            cursor: pointer;
+            background-color: #dcdcdc;
+        }
+
+        img {
+            width: 12px;
+            vertical-align: baseline;
+
+            &:hover {
+                outline: none !important;
+            }
+        }
+    }
+
+}
+
 .notFocused {
     .dvNrkR {
         display: none !important;
+        border: 1px solid #00a1ff !important;
     }
 
     .hMFlUR {
         display: none !important;
+        border: 1px solid #00a1ff !important;
     }
 }
 
-.dvNrkR {
-    .rotate{
-        top: 106% !important;
-        left: 50.5% !important;
-    }
+.dvNrkR .rotate i {
+    background-size: 100% 100% !important;
+    background-image: $bg-img !important;
+    top: -56px !important;
+}
+
+
+
+.dvNrkR, .hMFlUR {
+    border: 1px solid #00a1ff !important;
+}
+
+.square {
+    border: 1px solid #00a1ff !important;
 }
 
 img {
@@ -188,17 +277,3 @@ img {
 }
 
 
-textarea {
-
-    white-space: pre-wrap !important;
-
-    &:focus {
-        border: 1px solid red;
-        outline: none !important;
-      }
-
-    &:focus-visible {
-        border: 1px solid red;
-        outline: none !important;
-    }
-}
