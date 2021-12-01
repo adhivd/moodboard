@@ -26,8 +26,8 @@ const DynamicImage = (props) => {
 
     let imgStyle = {
         position: 'absolute',
-        top: props.top + 1, // bc of borders on rect
-        left: props.left + 1,
+        top: props.top,
+        left: props.left,
         width: props.width,
         height: props.height,
         transform: 'rotate(' + props.rotateAngle + 'deg)',

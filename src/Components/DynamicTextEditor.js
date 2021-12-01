@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, useRef } from 'react'
+import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react'
 import isHotkey from 'is-hotkey'
 import { Editable, withReact, useSlate, Slate } from 'slate-react'
 import {
@@ -15,6 +15,14 @@ import code from '../content/img/toolbar/code.png';
 import h1 from '../content/img/toolbar/h1.png';
 import h2 from '../content/img/toolbar/h2.png';
 import quote from '../content/img/toolbar/quote.png';
+import numlist from '../content/img/toolbar/num-list.png';
+import bulletList from '../content/img/toolbar/bullet-list.png';
+import aligncenter from '../content/img/toolbar/align-center.png';
+import alignright from '../content/img/toolbar/align-right.png';
+import alignleft from '../content/img/toolbar/align-left.png';
+
+
+
 // import lineitem from '../content/img/toolbar/lineitem.png';
 // import bulletitem from '../content/img/toolbar/bulletitem.png';
 
@@ -43,6 +51,7 @@ const DynamicTextEditor = (props) => {
 		width: props.width,
 		height: props.height,
 		fontFamily: 'Helvetica, sans-serif',
+		textAlign: 'left',
 		display: 'inline-block',
 		border: '1px solid transparent',
 		transform: 'rotate(' + props.rotateAngle + 'deg)',
@@ -58,8 +67,11 @@ const DynamicTextEditor = (props) => {
 	}
 
 	let toolbar;
+	let readOnly = true;
 
-	if(props.isFocused) {
+	if(props.isEditable) {
+		textStyle.zIndex = 0;
+		readOnly = false;
 		toolbar = (<div className={"DynamicTextEditorToolbar"} style={toolBarStyle}> 
 				<MarkButton format="bold" icon={bold} />
 				<MarkButton format="italic" icon={italic} />
@@ -68,16 +80,19 @@ const DynamicTextEditor = (props) => {
 				<BlockButton format="heading-one" icon={h1} />
 				<BlockButton format="heading-two" icon={h2} />
 				<BlockButton format="block-quote" icon={quote} />
-				<BlockButton format="numbered-list" icon="format_list_numbered" />
-				<BlockButton format="bulleted-list" icon="format_list_bulleted" />
+				<BlockButton format="numbered-list" icon={numlist} />
+				<BlockButton format="bulleted-list" icon={bulletList} />
 		</div>);
 	}
 
-	if(props.isEditable) {
-		textStyle.zIndex = 0;
-	}
+	// if there is textContent already stored, use that instead of initial value (i.e. copy pasted block)
+	const [value, setValue] = useState(props.textContent ? props.textContent : initialValue)
+	
+	// send changes up to Canvas on text change
+	useEffect(() => {
+		props.updateTextContent(props.uuidkey, value);
+	}, [value]);
 
-	const [value, setValue] = useState(initialValue)
 	const renderElement = useCallback(props => <Element {...props} />, [])
 	const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 	const editorRef = useRef()
@@ -90,9 +105,10 @@ const DynamicTextEditor = (props) => {
 			<Editable
 				renderElement={renderElement}
 				renderLeaf={renderLeaf}
-				placeholder="Enter some rich text…"
+				placeholder="Enter some text..."
 				spellCheck
 				autoFocus
+				readOnly={readOnly}
 				className={"textEditor"}
 				style={textStyle}
 				onKeyDown={event => {
@@ -113,6 +129,7 @@ const toggleBlock = (editor, format) => {
   const isActive = isBlockActive(editor, format)
   const isList = LIST_TYPES.includes(format)
 
+  console.log("this happened", editor, format)
   Transforms.unwrapNodes(editor, {
 	match: n =>
 	  !Editor.isEditor(n) &&
@@ -123,7 +140,8 @@ const toggleBlock = (editor, format) => {
   const newProperties = {
 	type: isActive ? 'paragraph' : isList ? 'list-item' : format,
   }
-  Transforms.setNodes<SlateElement>(editor, newProperties)
+
+  Transforms.setNodes(editor, newProperties)
 
   if (!isActive && isList) {
 	const block = { type: format, children: [] }
@@ -133,6 +151,7 @@ const toggleBlock = (editor, format) => {
 
 const toggleMark = (editor, format) => {
   const isActive = isMarkActive(editor, format)
+  console.log("active:", isActive)
 
   if (isActive) {
 	Editor.removeMark(editor, format)
@@ -232,37 +251,12 @@ const initialValue = [
   {
 	type: 'paragraph',
 	children: [
-	  { text: 'This is editable ' },
+	  { text: 'This is' },
+	  { text: ' editable ', italic: true },
 	  { text: 'rich', bold: true },
-	  { text: ' text, ' },
-	  { text: 'much', italic: true },
-	  { text: ' better than a ' },
-	  { text: '<textarea>', code: true },
-	  { text: '!' },
+	  { text: ' text!' },
 	],
-  },
-  {
-	type: 'paragraph',
-	children: [
-	  {
-		text:
-		  "Since it's rich text, you can do things like turn a selection of text ",
-	  },
-	  { text: 'bold', bold: true },
-	  {
-		text:
-		  ', or add a semantically rendered block quote in the middle of the page, like this:',
-	  },
-	],
-  },
-  {
-	type: 'block-quote',
-	children: [{ text: 'A wise quote.' }],
-  },
-  {
-	type: 'paragraph',
-	children: [{ text: 'Try it out for yourself!' }],
-  },
+  }
 ]
 
 export default DynamicTextEditor;

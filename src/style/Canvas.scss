@@ -8,9 +8,9 @@ $bg-img: url('../content/img/rotate.svg');
 
     position: absolute;
     top: 20px;
-    left: 5%;
+    left: 20px;
     height: 50px;
-    width: 30%;
+    column-gap: 3px;
     border: 1px solid #dcdcdc;
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
@@ -22,8 +22,8 @@ $bg-img: url('../content/img/rotate.svg');
 
     .action {
 
-        height: 50px;
-        width: 50px;
+        height: 40px;
+        width: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -69,8 +69,8 @@ $bg-img: url('../content/img/rotate.svg');
     padding: 15px;
     border-radius: 5px;
     box-shadow: 0 13px 0 0 rgb(50 50 93 / 0%), 0 8px 17px -8px rgb(0 0 0 / 30%);
-    left: 200px;
-    top: 100px;
+    left: 100px;
+    top: 90px;
     
     text-align:center;
 
@@ -204,7 +204,7 @@ $bg-img: url('../content/img/rotate.svg');
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: middle;
-    gap: 0 10px;
+    gap: 0 5px;
     outline: 1px solid #dcdcdc;
     border-radius: 3px;
     padding: 5px;
@@ -251,6 +251,10 @@ $bg-img: url('../content/img/rotate.svg');
         border: 1px solid #00a1ff !important;
     }
 }
+
+// .dvNrkR .rotate {
+//     top: -79px !important;
+// }
 
 .dvNrkR .rotate i {
     background-size: 100% 100% !important;

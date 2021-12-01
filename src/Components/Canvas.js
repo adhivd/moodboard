@@ -3,6 +3,8 @@ import Toolkit from './Toolkit'
 import Draggable from 'react-draggable';
 import Block from './Block';
 import FileDropZone from './FileDropZone';
+import GuideHandler from './GuideHandler';
+
 
 import { v4 as uuidv4 } from 'uuid';
 import './../style/Canvas.scss';
@@ -157,18 +159,19 @@ class Canvas extends Component {
             }
 
             // cmd + c
-            else if((e.key == "c" && e.metaKey) && this.state.focusedBlockKey != null) {
+            else if((e.key == "c" && e.metaKey) && this.state.focusedBlockKey != null && !this.state.textEditMode) {
                 this.copyBlock();
             }
 
             // cmd + v
-            else if((e.key == "v" && e.metaKey) && this.state.focusedBlockKey != null) {
+            else if((e.key == "v" && e.metaKey) && this.state.focusedBlockKey != null && !this.state.textEditMode) {
                 console.log(this.state.blockMap)
                 this.pasteBlock()
             }
     }
 
     setFocusedBlock = (e) => {
+        console.log("setFocusedBlock called", e);
         let k;
         // script to "swim" up the HTML DOM until you find a div tag w/ uuidkey for the block
         let finder = e.target;
@@ -247,7 +250,7 @@ class Canvas extends Component {
             contentType: type,
             dataUrl: dataUrl,
             uuidkey: id,
-            textContent: this.state.initialText,
+            textContent: null,
             left: this.state.nextLeft,
             top: this.state.nextTop,
             rotateAngle: 0,
@@ -337,6 +340,9 @@ class Canvas extends Component {
                 <FileDropZone 
                     uploadFiles={this.uploadFiles}
                     sendOpenFunction={this.sendOpenFunction}
+                />
+                <GuideHandler 
+                
                 />
             </div>
         );
