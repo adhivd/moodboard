@@ -69,6 +69,8 @@ const DynamicTextEditor = (props) => {
 	let toolbar;
 	let readOnly = true;
 
+	const [font, setFont] = React.useState('');
+
 	if(props.isEditable) {
 		textStyle.zIndex = 0;
 		readOnly = false;
@@ -82,6 +84,7 @@ const DynamicTextEditor = (props) => {
 				<BlockButton format="block-quote" icon={quote} />
 				<BlockButton format="numbered-list" icon={numlist} />
 				<BlockButton format="bulleted-list" icon={bulletList} />
+				<FontBlockButton format="font-select" icon={bold} setFont={setFont} />
 		</div>);
 	}
 
@@ -93,7 +96,12 @@ const DynamicTextEditor = (props) => {
 		props.updateTextContent(props.uuidkey, value);
 	}, [value]);
 
-	const renderElement = useCallback(props => <Element {...props} />, [])
+	useEffect(() => {
+		console.log("is my font changing: ", font);
+	}, [font]);
+
+	console.log("font before render element: ", font);
+	const renderElement = useCallback((props) => {console.log("font before literal elemet: ", font); return <Element {...props} font={font} />}, [font])
 	const renderLeaf = useCallback(props => <Leaf {...props} />, [])
 	const editorRef = useRef()
 	if (!editorRef.current) editorRef.current = withReact(createEditor())
@@ -123,6 +131,32 @@ const DynamicTextEditor = (props) => {
 			/>
 		</Slate>
 	)
+}
+
+const toggleFontBlock = (editor, format) => {
+	const isActive = isBlockActive(editor, format)
+
+	const isList = LIST_TYPES.includes(format)
+  
+	console.log("this happened", editor, format)
+	Transforms.unwrapNodes(editor, {
+	  match: n =>
+		!Editor.isEditor(n) &&
+		SlateElement.isElement(n) &&
+		LIST_TYPES.includes(n.type),
+	  split: true,
+	})
+
+	const newProperties = {
+		type: format,
+	}
+  
+	Transforms.setNodes(editor, newProperties)
+  
+	if (!isActive && isList) {
+	  const block = { type: format, children: [] }
+	  Transforms.wrapNodes(editor, block)
+	}
 }
 
 const toggleBlock = (editor, format) => {
@@ -178,7 +212,9 @@ const isMarkActive = (editor, format) => {
   return marks ? marks[format] === true : false
 }
 
-const Element = ({ attributes, children, element }) => {
+const Element = ({ attributes, children, element, font}) => {
+	console.log("element props: ", font);
+	// console.log("FONT STATE: ", this.props.font);
   switch (element.type) {
 	case 'block-quote':
 	  return <blockquote {...attributes}>{children}</blockquote>
@@ -191,7 +227,15 @@ const Element = ({ attributes, children, element }) => {
 	case 'list-item':
 	  return <li {...attributes}>{children}</li>
 	case 'numbered-list':
+		console.log("what is children here: ", children);
+		console.log("number attributes: ", attributes);
+		console.log("number element: ", element);
 	  return <ol {...attributes}>{children}</ol>
+	case 'font-select':
+		console.log("what is children for font select: ", children);
+		console.log("font attributes: ", attributes);
+		console.log("font element: ", element);
+		return <span {...attributes} style={{"font-family": font}}>{children}</span>
 	default:
 	  return <p {...attributes}>{children}</p>
   }
@@ -223,6 +267,7 @@ const BlockButton = ({ format, icon }) => {
 	<button
 	  active={isBlockActive(editor, format)}
 	  onMouseDown={event => {
+		console.log("regular block event: ", event);
 		event.preventDefault()
 		toggleBlock(editor, format)
 	  }}
@@ -230,6 +275,30 @@ const BlockButton = ({ format, icon }) => {
 	  <img src={icon} />
 	</button>
   )
+}
+
+const handleSelectChange = (event, editor, format, setFont) => {
+	console.log("select on change: ", event.target.value);
+	event.preventDefault()
+	setFont(event.target.value);
+	toggleFontBlock(editor, format)
+};
+
+const FontBlockButton = ({format, icon, setFont}) => {
+	const editor = useSlate()
+	console.log("format editor: ", editor);
+	console.log("what is format: ", format);
+	return (
+	<select name="fonts" id="fonts"
+		onChange={(event) => handleSelectChange(event, editor, format, setFont)}
+		active={isBlockActive(editor, format)}
+	>
+		<option value="Arial">Arial</option>
+		<option value="Georgia">Georgia</option>
+		<option value="mercedes">Mercedes</option>
+		<option value="Times New Roman">Times New Roman</option>
+	</select>
+	)
 }
 
 const MarkButton = ({ format, icon }) => {
